@@ -4,7 +4,7 @@
 import ddt
 import mock
 from django.conf import settings
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from opaque_keys.edx.keys import CourseKey
 
 from lms.djangoapps.certificates.tests.factories import GeneratedCertificateFactory
@@ -119,9 +119,8 @@ class TestCredentialsSignalsSendGrade(TestCase):
         mock_send_grade_to_credentials.delay.reset_mock()
 
         # Correctly not sent
-        site_config.site_values['ENABLE_LEARNER_RECORDS'] = False
-        site_config.save()
-        send_grade_if_interesting(self.user, self.key, 'verified', 'downloadable', None, None)
+        with override_settings(FEATURES={"ENABLE_LEARNER_RECORDS": False}):
+            send_grade_if_interesting(self.user, self.key, 'verified', 'downloadable', None, None)
         self.assertFalse(mock_send_grade_to_credentials.delay.called)
 
 

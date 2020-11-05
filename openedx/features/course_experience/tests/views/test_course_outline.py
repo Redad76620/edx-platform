@@ -716,7 +716,6 @@ class TestCourseOutlineResumeCourse(SharedModuleStoreTestCase, CompletionWaffleT
         time of the waffle switch that enables completion data tracking.
         """
         view = CourseOutlineFragmentView()
-        switches = waffle.waffle()
         switch_name = waffle.ENABLE_COMPLETION_TRACKING_SWITCH.name
         switch, _ = Switch.objects.get_or_create(name=switch_name)
 

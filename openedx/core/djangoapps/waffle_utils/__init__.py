@@ -123,7 +123,7 @@ class WaffleFlag(LegacyWaffleFlag):
             yield
 
 
-class CourseWaffleFlag(BaseWaffleFlag):
+class CourseWaffleFlag(LegacyWaffleFlag):
     """
     Represents a single waffle flag that can be forced on/off for a course. This class should be used instead of
     WaffleFlag when in the context of a course.

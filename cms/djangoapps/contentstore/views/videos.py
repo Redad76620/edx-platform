@@ -41,7 +41,7 @@ from edxval.api import (
 from opaque_keys.edx.keys import CourseKey
 from pytz import UTC
 
-from edx_toggles.toggles import WaffleFlagNamespace, WaffleSwitchNamespace
+from edx_toggles.toggles import LegacyWaffleFlagNamespace, LegacyWaffleSwitchNamespace
 from edxmako.shortcuts import render_to_response
 from openedx.core.djangoapps.video_config.models import VideoTranscriptEnabledFlag
 from openedx.core.djangoapps.video_pipeline.config.waffle import (
@@ -69,13 +69,13 @@ LOGGER = logging.getLogger(__name__)
 
 # Waffle switches namespace for videos
 WAFFLE_NAMESPACE = 'videos'
-WAFFLE_SWITCHES = WaffleSwitchNamespace(name=WAFFLE_NAMESPACE)
+WAFFLE_SWITCHES = LegacyWaffleSwitchNamespace(name=WAFFLE_NAMESPACE)
 
 # Waffle switch for enabling/disabling video image upload feature
 VIDEO_IMAGE_UPLOAD_ENABLED = 'video_image_upload_enabled'
 
 # Waffle flag namespace for studio
-WAFFLE_STUDIO_FLAG_NAMESPACE = WaffleFlagNamespace(name=u'studio')
+WAFFLE_STUDIO_FLAG_NAMESPACE = LegacyWaffleFlagNamespace(name=u'studio')
 
 ENABLE_VIDEO_UPLOAD_PAGINATION = CourseWaffleFlag(
     waffle_namespace=WAFFLE_STUDIO_FLAG_NAMESPACE,

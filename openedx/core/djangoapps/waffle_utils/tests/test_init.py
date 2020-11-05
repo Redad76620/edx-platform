@@ -9,7 +9,7 @@ from django.test.client import RequestFactory
 from django.test.utils import override_settings
 # TODO: we really shouldn't import from edx_toggles' internal API, but that's currently the only way to mock the
 # monitoring functions.
-import edx_toggles.toggles.internal.waffle
+import edx_toggles.toggles.internal.waffle.flag
 from edx_django_utils.cache import RequestCache
 from mock import call, patch
 from opaque_keys.edx.keys import CourseKey
@@ -48,7 +48,7 @@ class TestCourseWaffleFlag(TestCase):
         RequestCache.clear_all_namespaces()
 
     @override_settings(WAFFLE_FLAG_CUSTOM_ATTRIBUTES=[NAMESPACED_FLAG_NAME])
-    @patch.object(edx_toggles.toggles.internal.waffle, 'set_custom_attribute')
+    @patch.object(edx_toggles.toggles.internal.waffle.flag, 'set_custom_attribute')
     @ddt.data(
         {'course_override': WaffleFlagCourseOverrideModel.ALL_CHOICES.on, 'waffle_enabled': False, 'result': True},
         {'course_override': WaffleFlagCourseOverrideModel.ALL_CHOICES.off, 'waffle_enabled': True, 'result': False},
@@ -91,7 +91,7 @@ class TestCourseWaffleFlag(TestCase):
         self._assert_waffle_flag_attribute(mock_set_custom_attribute, expected_flag_value=expected_flag_value)
 
     @override_settings(WAFFLE_FLAG_CUSTOM_ATTRIBUTES=[NAMESPACED_FLAG_NAME])
-    @patch.object(edx_toggles.toggles.internal.waffle, 'set_custom_attribute')
+    @patch.object(edx_toggles.toggles.internal.waffle.flag, 'set_custom_attribute')
     def test_undefined_waffle_flag(self, mock_set_custom_attribute):
         """
         Test flag with undefined waffle flag.
@@ -152,7 +152,7 @@ class TestCourseWaffleFlag(TestCase):
         {'expected_count': 1, 'waffle_flag_attribute_setting': [NAMESPACED_FLAG_NAME]},
         {'expected_count': 2, 'waffle_flag_attribute_setting': [NAMESPACED_FLAG_NAME, NAMESPACED_FLAG_2_NAME]},
     )
-    @patch.object(edx_toggles.toggles.internal.waffle, 'set_custom_attribute')
+    @patch.object(edx_toggles.toggles.internal.waffle.flag, 'set_custom_attribute')
     def test_waffle_flag_attribute_for_various_settings(self, data, mock_set_custom_attribute):
         """
         Test that custom attributes are recorded when waffle flag accessed.

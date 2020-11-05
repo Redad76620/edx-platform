@@ -89,7 +89,7 @@ edx-rest-api-client
 edx-search
 edx-sga
 edx-submissions
-edx-toggles                         # Feature toggles management
+git+https://github.com/regisb/edx-toggles.git@regisb/deprecate-namespaces#egg=edx-toggles==2.0.0                         # Feature toggles management
 edx-user-state-client
 edx-when
 edxval

@@ -8,6 +8,7 @@ from completion import models, waffle
 from completion.test_utils import CompletionWaffleTestMixin, submit_completions_for_testing
 from django.core.exceptions import ValidationError
 from django.test import TestCase
+from edx_toggles.toggles.testutils import override_waffle_switch
 from opaque_keys.edx.keys import CourseKey, UsageKey
 from six.moves import range, zip
 from student.tests.factories import CourseEnrollmentFactory, UserFactory
@@ -165,7 +166,7 @@ class SubmitBatchCompletionTestCase(CompletionWaffleTestMixin, TestCase):
         self.assertEqual(models.BlockCompletion.objects.last().completion, 1.0)
 
     def test_submit_batch_completion_without_waffle(self):
-        with waffle.waffle().override(waffle.ENABLE_COMPLETION_TRACKING, False):
+        with override_waffle_switch(waffle.ENABLE_COMPLETION_TRACKING_SWITCH, False):
             with self.assertRaises(RuntimeError):
                 blocks = [(self.block_key, 1.0)]
                 models.BlockCompletion.objects.submit_batch_completion(self.user, blocks)

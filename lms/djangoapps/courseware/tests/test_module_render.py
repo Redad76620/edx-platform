@@ -80,7 +80,6 @@ from xmodule.lti_module import LTIDescriptor
 from xmodule.modulestore import ModuleStoreEnum
 from xmodule.modulestore.django import modulestore
 from xmodule.modulestore.tests.django_utils import (
-    TEST_DATA_MIXED_MODULESTORE,
     ModuleStoreTestCase,
     SharedModuleStoreTestCase
 )
@@ -91,11 +90,6 @@ from xmodule.x_module import STUDENT_VIEW, CombinedSystem, XModule, XModuleDescr
 
 
 TEST_DATA_DIR = settings.COMMON_TEST_DATA_ROOT
-
-# pylint: disable=feature-toggle-needs-doc
-ENABLE_COMPLETION_TRACKING_SWITCH = LegacyWaffleSwitch(
-    completion_waffle.waffle(), completion_waffle.ENABLE_COMPLETION_TRACKING, __name__
-)
 
 
 @XBlock.needs("field-data")
@@ -771,7 +765,7 @@ class TestHandleXBlockCallback(SharedModuleStoreTestCase, LoginEnrollmentTestCas
     @ddt.unpack
     @XBlock.register_temp_plugin(StubCompletableXBlock, identifier='comp')
     def test_completion_events_with_completion_disabled(self, signal, data):
-        with override_waffle_switch(ENABLE_COMPLETION_TRACKING_SWITCH, False):
+        with override_waffle_switch(completion_waffle.ENABLE_COMPLETION_TRACKING_SWITCH, False):
             course = CourseFactory.create()
             block = ItemFactory.create(category='comp', parent=course)
             request = self.request_factory.post(
@@ -793,7 +787,7 @@ class TestHandleXBlockCallback(SharedModuleStoreTestCase, LoginEnrollmentTestCas
 
     @XBlock.register_temp_plugin(StubCompletableXBlock, identifier='comp')
     def test_completion_signal_for_completable_xblock(self):
-        with override_waffle_switch(ENABLE_COMPLETION_TRACKING_SWITCH, True):
+        with override_waffle_switch(completion_waffle.ENABLE_COMPLETION_TRACKING_SWITCH, True):
             course = CourseFactory.create()
             block = ItemFactory.create(category='comp', parent=course)
 
@@ -873,7 +867,7 @@ class TestHandleXBlockCallback(SharedModuleStoreTestCase, LoginEnrollmentTestCas
 
     @XBlock.register_temp_plugin(StubCompletableXBlock, identifier='comp')
     def test_progress_signal_ignored_for_completable_xblock(self):
-        with override_waffle_switch(ENABLE_COMPLETION_TRACKING_SWITCH, True):
+        with override_waffle_switch(completion_waffle.ENABLE_COMPLETION_TRACKING_SWITCH, True):
             course = CourseFactory.create()
             block = ItemFactory.create(category='comp', parent=course)
 
@@ -886,7 +880,7 @@ class TestHandleXBlockCallback(SharedModuleStoreTestCase, LoginEnrollmentTestCas
 
     @XBlock.register_temp_plugin(XBlockWithoutCompletionAPI, identifier='no_comp')
     def test_progress_signal_processed_for_xblock_without_completion_api(self):
-        with override_waffle_switch(ENABLE_COMPLETION_TRACKING_SWITCH, True):
+        with override_waffle_switch(completion_waffle.ENABLE_COMPLETION_TRACKING_SWITCH, True):
             course = CourseFactory.create()
             block = ItemFactory.create(category='no_comp', parent=course)
 
@@ -900,7 +894,7 @@ class TestHandleXBlockCallback(SharedModuleStoreTestCase, LoginEnrollmentTestCas
 
     @XBlock.register_temp_plugin(StubCompletableXBlock, identifier='comp')
     def test_skip_handlers_for_masquerading_staff(self):
-        with override_waffle_switch(ENABLE_COMPLETION_TRACKING_SWITCH, True):
+        with override_waffle_switch(completion_waffle.ENABLE_COMPLETION_TRACKING_SWITCH, True):
             course = CourseFactory.create()
             block = ItemFactory.create(category='comp', parent=course)
             request = self.request_factory.post(

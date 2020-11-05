@@ -183,7 +183,7 @@ class XBlockRuntime(RuntimeShim, Runtime):
         """
         Submit a completion object for the block.
         """
-        if not completion_waffle.waffle().is_enabled(completion_waffle.ENABLE_COMPLETION_TRACKING):
+        if not completion_waffle.ENABLE_COMPLETION_TRACKING_SWITCH.is_enabled():
             return
         BlockCompletion.objects.submit_completion(
             user=self.user,

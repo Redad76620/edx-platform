@@ -4,7 +4,6 @@ Feature flag support for experiments
 
 import datetime
 import logging
-from contextlib import contextmanager
 
 import dateutil
 import pytz
@@ -62,6 +61,7 @@ class ExperimentWaffleFlag(CourseWaffleFlag):
         def test_my_experiment(self):
             ...
     """
+
     def __init__(
             self,
             waffle_namespace,
@@ -80,6 +80,13 @@ class ExperimentWaffleFlag(CourseWaffleFlag):
             for bucket in range(num_buckets)
         ]
         self.use_course_aware_bucketing = use_course_aware_bucketing
+
+    @property
+    def waffle_namespace_name(self):
+        """
+        Legacy property used to identify the app that uses this flag.
+        """
+        return self.name.split(".")[0]
 
     def _cache_bucket(self, key, value):
         request_cache = RequestCache('experiments')
@@ -225,7 +232,7 @@ class ExperimentWaffleFlag(CourseWaffleFlag):
                 event_name='edx.bi.experiment.user.bucketed',
                 properties={
                     'site': request.site.domain,
-                    'app_label': self.waffle_namespace.name,
+                    'app_label': self.waffle_namespace_name,
                     'experiment': self.flag_name,
                     'course_id': str(course_key) if course_key else None,
                     'bucket': bucket,

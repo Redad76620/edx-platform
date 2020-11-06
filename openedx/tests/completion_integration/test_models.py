@@ -4,7 +4,8 @@ Test models, managers, and validators.
 
 
 import six
-from completion import models, waffle
+from completion import models
+from completion.waffle import ENABLE_COMPLETION_TRACKING_SWITCH
 from completion.test_utils import CompletionWaffleTestMixin, submit_completions_for_testing
 from django.core.exceptions import ValidationError
 from django.test import TestCase
@@ -166,7 +167,7 @@ class SubmitBatchCompletionTestCase(CompletionWaffleTestMixin, TestCase):
         self.assertEqual(models.BlockCompletion.objects.last().completion, 1.0)
 
     def test_submit_batch_completion_without_waffle(self):
-        with override_waffle_switch(waffle.ENABLE_COMPLETION_TRACKING_SWITCH, False):
+        with override_waffle_switch(ENABLE_COMPLETION_TRACKING_SWITCH, False):
             with self.assertRaises(RuntimeError):
                 blocks = [(self.block_key, 1.0)]
                 models.BlockCompletion.objects.submit_batch_completion(self.user, blocks)

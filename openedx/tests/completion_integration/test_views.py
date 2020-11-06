@@ -6,8 +6,8 @@ Test models, managers, and validators.
 
 import ddt
 import six
-from completion import waffle
 from completion.test_utils import CompletionWaffleTestMixin
+from completion.waffle import ENABLE_COMPLETION_TRACKING_SWITCH
 from django.urls import reverse
 from edx_toggles.toggles.testutils import override_waffle_switch
 from rest_framework.test import APIClient
@@ -82,7 +82,7 @@ class CompletionBatchTestCase(CompletionWaffleTestMixin, ModuleStoreTestCase):
         """
         Test response when the waffle switch is disabled (default).
         """
-        with override_waffle_switch(waffle.ENABLE_COMPLETION_TRACKING_SWITCH, False):
+        with override_waffle_switch(ENABLE_COMPLETION_TRACKING_SWITCH, False):
             response = self.client.post(self.url, {'username': self.ENROLLED_USERNAME}, format='json')
         self.assertEqual(response.data, {
             "detail":

@@ -157,13 +157,13 @@ class CourseWaffleFlag(LegacyWaffleFlag):
         from .models import WaffleFlagCourseOverrideModel
 
         cache_key = "{}.{}".format(self.namespaced_flag_name, str(course_key))
-        course_override = self._cached_flags.get(cache_key)
+        course_override = self.cached_flags().get(cache_key)
 
         if course_override is None:
             course_override = WaffleFlagCourseOverrideModel.override_value(
                 self.namespaced_flag_name, course_key
             )
-            self._cached_flags[cache_key] = course_override
+            self.cached_flags()[cache_key] = course_override
 
         if course_override == WaffleFlagCourseOverrideModel.ALL_CHOICES.on:
             return True
@@ -188,6 +188,6 @@ class CourseWaffleFlag(LegacyWaffleFlag):
             )
         is_enabled_for_course = self._get_course_override_value(course_key)
         if is_enabled_for_course is not None:
-            self._monitor_value(is_enabled_for_course)
+            self.set_monitor_value(is_enabled_for_course)
             return is_enabled_for_course
         return super().is_enabled()

@@ -1168,6 +1168,9 @@ INSTALLED_APPS = [
     
     # Jupyter Notebook Viewer XBlock
     'xblock_jupyter_viewer',
+    
+    # Jupyter Notebook Graded XBlock
+    'xblock_jupyter_graded',
 
     'openedx.features.course_duration_limits',
     'openedx.features.content_type_gating',

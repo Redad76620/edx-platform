@@ -1165,6 +1165,9 @@ INSTALLED_APPS = [
 
     # API Documentation
     'rest_framework_swagger',
+    
+    # Jupyter Notebook Viewer XBlock
+    'xblock_jupyter_viewer',
 
     'openedx.features.course_duration_limits',
     'openedx.features.content_type_gating',
